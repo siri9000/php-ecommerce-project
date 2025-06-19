@@ -1,0 +1,55 @@
+<?php
+session_start();
+
+// Handle remove action
+if (isset($_GET['remove'])) {
+    $remove_id = $_GET['remove'];
+    foreach ($_SESSION['cart'] as $key => $item) {
+        if ($item['id'] == $remove_id) {
+            unset($_SESSION['cart'][$key]);
+            break;
+        }
+    }
+    $_SESSION['cart'] = array_values($_SESSION['cart']); // Reindex the array
+    header("Location: cart.php");
+    exit();
+}
+
+$cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+$total = 0;
+?>
+
+<h2>🛒 Your Cart</h2>
+
+<?php if (empty($cart)) { ?>
+    <p>Your cart is empty.</p>
+<?php } else { ?>
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+        <?php foreach ($cart as $item) {
+            $subtotal = $item['price'] * $item['quantity'];
+            $total += $subtotal;
+        ?>
+        <tr>
+            <td><?= $item['name'] ?></td>
+            <td>₹<?= $item['price'] ?></td>
+            <td><?= $item['quantity'] ?></td>
+            <td>₹<?= $subtotal ?></td>
+            <td><a href="cart.php?remove=<?= $item['id'] ?>" onclick="return confirm('Remove this item?')">Remove</a></td>
+        </tr>
+        <?php } ?>
+        <tr>
+            <td colspan="3"><strong>Total:</strong></td>
+            <td colspan="2"><strong>₹<?= $total ?></strong></td>
+        </tr>
+    </table>
+<?php } ?>
+
+<br>
+<a href="products.php">← Back to Products</a>

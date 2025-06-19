@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <form action="register.php" method="post" onsubmit="return validateForm()">
+        <h2>User Registration</h2>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" minlength="6" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+    function validateForm() {
+        const email = document.forms[0].email.value;
+        const password = document.forms[0].password.value;
+
+        if (!email.includes("@")) {
+            alert("Invalid email format!");
+            return false;
+        }
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters.");
+            return false;
+        }
+        return true;
+    }
+    </script>
+</body>
+</html>
